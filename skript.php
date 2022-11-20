@@ -11,7 +11,7 @@
 	$servername = "localhost";
 	$username = "root";
 	$password = "";
-	$dbname = "uppgift-4";
+	$dbname = "users";
 	$conn = new mysqli($servername, $username, $password, $dbname);
 
 	$sql = "SELECT * FROM users";
@@ -19,16 +19,22 @@
 
 	if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
-			if($row["username"] == $_POST["username"] && $row["password"] == $_POST["password"]){
+			if($row["userId"] == $_POST["username"] && $row["passwd"] == $_POST["password"]){
 				header("Location: checklogin.php");
 			}
 			else {
 				echo "<h1>Inloggningen misslyckades!</h1><p>Fel kombination av användarnamn och lösenord!</p>";	
-				echo "<br><br><a href='uppgift6.html'>Tillbaka</a>";
+				echo "<br><br><a href='uppgift7.html'>Tillbaka</a>";
 			}
 		}
 	} 
 	$conn->close();
+
+	if($login_success) {
+		session_start();
+		$_SESSION["username"] = $_POST["username"];
+	}
+	
 ?>
 </body>
 </html>
