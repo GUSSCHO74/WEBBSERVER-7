@@ -7,19 +7,19 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Välkommen!</h1>
+    <h1>Sho bror!</h1>
     <?php
         session_start();
         if (isset($_SESSION["username"]) && !empty($_SESSION["username"])) {
             echo "Du är inloggad som " . $_SESSION["username"] . ".";
         }
         else {
-            echo "Du är inte inloggad.";
+            echo "Du är inte inloggad wallah!";
         }    
     ?>
     <br><br>
     <form action="upload.php" method="post" enctype="multipart/form-data">
-        <input type="file" name="fileToUpload" id="fileToUpload" />
+        <input type="file" name="fileToUpload" id="fileToUpload" required/>
         <br><br>
         <input type="submit" value="Ladda upp" name="submit" />
     </form>

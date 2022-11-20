@@ -13,18 +13,27 @@
 <body>
 <?php
   if($_SESSION["username"] == "holros") {
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "users";
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    
     $sql = "INSERT INTO uploads (filename, user, uploadtime, snuskig)
     VALUES ('$filename', '" . $_SESSION["username"] . "', NOW(), TRUE)";
     $conn->query($sql);
-  }
+  } 
+    
   function fileDataForUpload($uploadUsername, $uploadFileName ){
     $FileLog = fopen("fileuploadinformation.txt", "a+") or die("Unable to open file!");
     fwrite($FileLog, $uploadUsername.";".$uploadFileName."\n");
     fclose($FileLog);
   }
+
   if($_SESSION["username"]){
     $target_dir = "uploads/";
     $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
+
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
       echo "The file ".basename($_FILES["fileToUpload"]["name"])." has been uploaded.";
       fileDataForUpload($_SESSION["username"], basename($_FILES["fileToUpload"]["name"]) );

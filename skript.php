@@ -17,24 +17,26 @@
 	$sql = "SELECT * FROM users";
 	$result = $conn->query($sql);	
 
+	$login_success = false;
+
 	if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
-			if($row["userId"] == $_POST["username"] && $row["passwd"] == $_POST["password"]){
-				header("Location: checklogin.php");
-			}
-			else {
-				echo "<h1>Inloggningen misslyckades!</h1><p>Fel kombination av användarnamn och lösenord!</p>";	
-				echo "<br><br><a href='uppgift7.html'>Tillbaka</a>";
+			if($row["username"] == $_POST["username"] && $row["password"] == $_POST["password"]){
+				$login_success = true;
 			}
 		}
 	} 
-	$conn->close();
-
-	if($login_success) {
+	
+	if($login_success){
 		session_start();
 		$_SESSION["username"] = $_POST["username"];
+		header("Location: checklogin.php");
 	}
-	
+	else {
+		echo "<h1>Inloggningen misslyckades!</h1><p>Fel kombination av användarnamn och lösenord!</p>";	
+		echo "<br><br><a href='uppgift7.html'>Tillbaka</a>";
+	}
+    $conn->close();
 ?>
 </body>
 </html>
