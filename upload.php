@@ -18,10 +18,13 @@
     $password = "";
     $dbname = "users";
     $conn = new mysqli($servername, $username, $password, $dbname);
-    
-    $sql = "INSERT INTO uploads (filename, user, uploadtime, snuskig)
-    VALUES ('$filename', '" . $_SESSION["username"] . "', NOW(), TRUE)";
-    $conn->query($sql);
+
+    $filename = $_FILES["fileToUpload"]["name"];
+    if(isset($filename)){
+      $sql = "INSERT INTO uploads (filename, user, uploadtime, snuskig)
+      VALUES ('$filename', '" . $_SESSION["username"] . "', NOW(), TRUE)";
+      $conn->query($sql);
+    }
   } 
     
   function fileDataForUpload($uploadUsername, $uploadFileName ){
