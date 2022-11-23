@@ -13,9 +13,6 @@
         if (isset($_SESSION["username"]) && !empty($_SESSION["username"])) {
             echo "Du är inloggad som " . $_SESSION["username"] . ".";
         }
-        else {
-            echo "Du är inte inloggad wallah!";
-        }    
     ?>
     <br><br>
     <form action="upload.php" method="post" enctype="multipart/form-data">

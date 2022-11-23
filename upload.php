@@ -1,7 +1,3 @@
-<?php
-  session_start();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,45 +6,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
-<body>
-<?php
-  if($_SESSION["username"] == "holros") {
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "users";
-    $conn = new mysqli($servername, $username, $password, $dbname);
+  <body>
+    <?php
+      session_start();
+      $servername = "localhost";
+      $username = "root";
+      $password = "";
+      $dbname = "users";
+      $conn = new mysqli($servername, $username, $password, $dbname);
+      
+      function fileDataForUpload($uploadUsername, $uploadFileName ){
+        $FileLog = fopen("fileuploadinformation.txt", "a+") or die("Unable to open file!");
+        fwrite($FileLog, $uploadUsername.";".$uploadFileName."\n");
+        fclose($FileLog);
+      } 
+      $target_dir = "uploads/";
+      $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
 
-    $filename = $_FILES["fileToUpload"]["name"];
-    if(isset($filename)){
-      $sql = "INSERT INTO uploads (filename, user, uploadtime, snuskig)
-      VALUES ('$filename', '" . $_SESSION["username"] . "', NOW(), TRUE)";
-      $conn->query($sql);
-    }
-  } 
-    
-  function fileDataForUpload($uploadUsername, $uploadFileName ){
-    $FileLog = fopen("fileuploadinformation.txt", "a+") or die("Unable to open file!");
-    fwrite($FileLog, $uploadUsername.";".$uploadFileName."\n");
-    fclose($FileLog);
-  }
+      $filename = $_FILES["fileToUpload"]["name"];
 
-  if($_SESSION["username"]){
-    $target_dir = "uploads/";
-    $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
-
-    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-      echo "The file ".basename($_FILES["fileToUpload"]["name"])." has been uploaded.";
-      fileDataForUpload($_SESSION["username"], basename($_FILES["fileToUpload"]["name"]) );
-    }
-    else {
-      echo "Sorry, there was an error uploading your file.";
-    }
-    echo "<br><br><a href='logout.php'>Logga ut</a><br><br>";
-  }
-  else {
-    echo "User is not logged in!";
-  }
-?>
-</body>
+      if($_SESSION["username"] == "holros") {
+        if(isset($filename)){
+          $sql = "INSERT INTO uploads (filename, user, uploadtime, snuskig)
+          VALUES ('$filename', '" . $_SESSION["username"] . "', NOW(), TRUE)";
+          $conn->query($sql);
+        }
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+          echo "The file ".basename($_FILES["fileToUpload"]["name"])." has been uploaded.";
+          fileDataForUpload($_SESSION["username"], basename($_FILES["fileToUpload"]["name"]) );
+        }
+      }
+      else {
+        if(isset($filename)){
+          $sql = "INSERT INTO uploads (filename, user, uploadtime, snuskig)
+          VALUES ('$filename', '" . $_SESSION["username"] . "', NOW(), FALSE)";
+          $conn->query($sql);
+        }
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+          echo "The file ".basename($_FILES["fileToUpload"]["name"])." has been uploaded.";
+          fileDataForUpload($_SESSION["username"], basename($_FILES["fileToUpload"]["name"]) );
+        }
+      }  
+      echo "<br><br><a href='logout.php'>Logga ut</a><br><br>";
+      ?>
+  </body>
 </html>

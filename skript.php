@@ -26,7 +26,6 @@
 			}
 		}
 	} 
-	
 	if($login_success){
 		session_start();
 		$_SESSION["username"] = $_POST["username"];
